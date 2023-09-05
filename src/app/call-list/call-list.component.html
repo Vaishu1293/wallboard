@@ -1,0 +1,17 @@
+<!-- call-list.component.html -->
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Department</th>
+      <th>Calls on Wait</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let department of callData | keyvalue"
+        [ngClass]="getRowClass(department.value)">
+      <td>{{ department.key }}</td>
+      <td>{{ department.value }}</td>
+    </tr>
+  </tbody>
+</table>
