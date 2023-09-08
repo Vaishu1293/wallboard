@@ -3,15 +3,12 @@
 <table class="table">
   <thead>
     <tr>
-      <th>Department</th>
-      <th>Calls on Wait</th>
+      <th *ngFor="let x of columns">{{x}}</th>
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let department of callData | keyvalue"
-        [ngClass]="getRowClass(department.value)">
-      <td>{{ department.key }}</td>
-      <td>{{ department.value }}</td>
+    <tr *ngFor="let y of callData" [ngClass]="getRowClass(y['Longest Waiting Call'])">
+      <td *ngFor="let c of columns">{{y[c]}}</td>
     </tr>
   </tbody>
 </table>

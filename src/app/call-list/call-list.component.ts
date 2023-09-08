@@ -8,37 +8,36 @@ import { CallListServiceService } from '../call-list-service.service';
 })
 export class CallListComponent implements OnInit {
 
-  callData: { [key: string]: number } = {};  // Specify the type here
-  maxCalls: number = 0;
-  minCalls: number = Infinity;
+  callData: any = {};  // Specify the type here
+  columns: any[] = [];
 
   constructor(private callListService: CallListServiceService) { }
 
   ngOnInit(): void {
     setInterval(() => {
       this.callListService.getCallData().subscribe((data: { [key: string]: number }) => {
-        // Sort the data by value in descending order
-        const sortedData = Object.entries(data)
-          .sort(([, a], [, b]) => b - a)
-          .reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {});
-
-        this.callData = sortedData;
-
-        const values = Object.values(sortedData).map(Number);  // Convert to numbers
-        this.maxCalls = Math.max(...values);
-        this.minCalls = Math.min(...values);
+        // console.log(data);
+        if (this.columns.length < 1){
+          this.columns = Object.keys(data[0]);
+        }
+        // console.log(this.columns);
+        this.callData = data;
       });
     }, 2000);  // Fetch new data every 2 seconds
   }
 
-  getRowClass(value: number): string {
-    if (value === this.maxCalls) {
-      return 'table-danger';
-    } else if (value === this.minCalls) {
-      return 'table-success';
+  getRowClass(longestWaitingCall: string): string {
+    // Convert "Longest Waiting Call" to total minutes
+    const [minutes, seconds] = longestWaitingCall.split(':').map(Number);
+    const totalMinutes = minutes + (seconds / 60);
+
+    // Compare with 5 minutes
+    if (totalMinutes > 5) {
+      return 'table-danger';  // Red background for more than 5 minutes
     } else {
-      return 'table-primary';
+      return 'table-primary';  // Blue background for the rest
     }
   }
+
 
 }
