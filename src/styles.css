@@ -1,1 +1,29 @@
 /* You can add global styles to this file, and also import other style files */
+
+.stylish-table {
+  font-family: 'Arial', sans-serif;
+  transition: all 0.3s ease;
+}
+
+.stylish-table th {
+  background-color: #f2f2f2;
+  color: black;
+}
+
+.stylish-table tr {
+  transition: all 0.3s ease;  /* Add transition for smooth effect */
+}
+
+.stylish-table tr:hover {
+  background-color: #f5f5f5;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);  /* Add box-shadow on hover */
+}
+
+tr.table-red {
+  background-color: rgba(255, 0, 0, 0.3) !important;
+}
+
+.table-green {
+  background-color: rgba(0, 255, 0, 0.3) !important;
+}
+
