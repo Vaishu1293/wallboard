@@ -1,0 +1,134 @@
+### Testing in Angular
+
+Angular comes with powerful built-in testing capabilities that allow you to write unit tests for components, services, directives, and other elements. Angular uses Jasmine as its default testing framework and Karma as its test runner.
+
+#### Installation
+
+If you generated your Angular project using the Angular CLI, then you already have the required dependencies for testing installed. If not, you may need to install Jasmine, Karma, and Angular testing utilities:
+
+```bash
+npm install jasmine-core karma karma-jasmine @angular/cli @angular-devkit/build-angular --save-dev
+```
+
+#### Unit Testing Example
+
+Let's consider a simple component that shows a message:
+
+```typescript
+// greeting.component.ts
+import { Component, Input } from '@angular/core';
+
+@Component({
+  selector: 'app-greeting',
+  template: '<h1>Hello, {{name}}!</h1>',
+})
+export class GreetingComponent {
+  @Input() name: string;
+}
+```
+
+You could write a unit test for this component using Angular's testing utilities:
+
+```typescript
+// greeting.component.spec.ts
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { GreetingComponent } from './greeting.component';
+
+describe('GreetingComponent', () => {
+  let component: GreetingComponent;
+  let fixture: ComponentFixture<GreetingComponent>;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      declarations: [ GreetingComponent ]
+    })
+    .compileComponents();
+  });
+
+  beforeEach(() => {
+    fixture = TestBed.createComponent(GreetingComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+
+  it('should display the name', () => {
+    component.name = 'John';
+    fixture.detectChanges();
+
+    const compiled = fixture.nativeElement;
+    expect(compiled.querySelector('h1').textContent).toContain('Hello, John!');
+  });
+});
+```
+
+#### Running Unit Tests
+
+Run the following command to execute your tests:
+
+```bash
+ng test
+```
+
+### End-to-End (E2E) Testing with Selenium
+
+Selenium WebDriver is a popular tool for writing automated tests for web applications. It simulates user behavior by driving a real or headless web browser. You can use Selenium WebDriver with Angular to write E2E tests that interact with your application just like a real user would.
+
+#### Installation
+
+To use Selenium, you'll need to install a language-specific client driver, such as WebDriverJS for JavaScript. You'll also need to download the browser-specific driver like ChromeDriver for Chrome.
+
+#### Selenium WebDriver Example
+
+Here's how you might test the same greeting component using Selenium WebDriver in JavaScript:
+
+First, install WebDriverJS:
+
+```bash
+npm install selenium-webdriver
+```
+
+And then, write the test:
+
+```javascript
+const { Builder, By } = require('selenium-webdriver');
+
+(async function helloTest() {
+  let driver = await new Builder().forBrowser('chrome').build();
+  try {
+    await driver.get('http://localhost:4200'); // replace with your app's URL
+
+    // Set the name in some input field (assuming there is one)
+    await driver.findElement(By.css('input#name')).sendKeys('John');
+
+    // Trigger the action to display the greeting
+    await driver.findElement(By.css('button#show-greeting')).click();
+
+    // Validate the greeting
+    let greeting = await driver.findElement(By.css('h1')).getText();
+    if (greeting.includes('Hello, John!')) {
+      console.log('Test passed');
+    } else {
+      console.log('Test failed');
+    }
+
+  } finally {
+    await driver.quit();
+  }
+})();
+```
+
+This Selenium test opens the web page, inputs a name in a text box, clicks a button to show the greeting, and then checks if the greeting is displayed as expected.
+
+#### Running E2E Tests
+
+To run the Selenium tests, make sure the browser-specific driver (like ChromeDriver) is installed and added to your system's PATH. Then, execute your Selenium test script:
+
+```bash
+node your-selenium-test-file.js
+```
+
+By combining Angular's built-in testing utilities for unit tests and Selenium for E2E tests, you can thoroughly verify the functionality and reliability of your Angular applications.

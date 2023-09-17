@@ -1,0 +1,90 @@
+The JSON manipulation capabilities presented here are for Jackson library in Java. In JavaScript and Node.js, JSON manipulation is generally simpler because JSON is a native data format in JavaScript. There is no need for a specialized library to perform the tasks you've described above. However, there are utility libraries that make it even easier to manipulate JSON objects. Below are some JavaScript alternatives for the mentioned Java functionalities.
+
+### Read JSON from String
+In JavaScript, you can use `JSON.parse`:
+```javascript
+const jsonString = '{ "field1": "value1", "field2": 999 }';
+const jsonObject = JSON.parse(jsonString);
+```
+
+### Write JSON to String
+In JavaScript, you can use `JSON.stringify`:
+```javascript
+const jsonString = JSON.stringify(jsonObject);
+```
+
+### Get Field
+Direct property access works:
+```javascript
+const value1 = jsonObject.field1;
+```
+
+### Get Field at Path
+JavaScript doesn't have a native `.at()` method, but you could use libraries like [lodash](https://lodash.com/) for deep property access:
+```javascript
+const _ = require('lodash');
+const name = _.get(jsonObject, 'identification.name');
+```
+
+### Convert Field
+JavaScript's dynamic typing makes this less cumbersome:
+```javascript
+const field2Str = String(jsonObject.field2);
+const field2Int = parseInt(jsonObject.field2);
+```
+
+### Convert with Default Value
+You can use logical OR for default values:
+```javascript
+const value = jsonObject.field3 || 'Default';
+```
+
+### Handling Null Field Values
+JavaScript allows for simple null checks:
+```javascript
+if (jsonObject.fieldName === null || jsonObject.fieldName === undefined) {
+  // Do something
+}
+```
+
+### Traverse JSON Object
+JavaScript makes it easy to loop through objects:
+```javascript
+function traverse(obj) {
+  for (const key in obj) {
+    if (typeof obj[key] === 'object') {
+      traverse(obj[key]);
+    } else {
+      console.log(key, obj[key]);
+    }
+  }
+}
+```
+
+### Create an Object
+Just use object literals or constructors:
+```javascript
+const newObj = {};
+```
+
+### Set Field
+Again, direct assignment works:
+```javascript
+newObj.field1 = 'value1';
+```
+
+### Remove Field
+The `delete` operator can remove object fields:
+```javascript
+delete newObj.field1;
+```
+
+### Iterate Fields and Field Names
+This can be done using `for...in` or `Object.keys`:
+```javascript
+for (const key in jsonObject) {
+  console.log(key, jsonObject[key]);
+}
+```
+
+JavaScript's native capabilities make it relatively straightforward to manipulate JSON objects, but you can also use utility libraries like lodash for more complex operations.
